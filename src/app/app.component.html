@@ -1,0 +1,100 @@
+<mat-toolbar color="white">   
+  <p>{{msg}}</p>
+  </mat-toolbar>
+<div class='main-container'>
+
+    <!-- (onNodeDoubleClicked) = "nodeDoubleClicked($event)" -->
+        <diagram-view
+            *ngIf = 'hide_me'
+            [id]= "'diagram_id'"
+            border-color='blue'
+            border-style= 'solid'
+            border-width= '5px'
+            [diagram] = "diagram"
+            allowInplaceEdit = "false"
+            Enabled = "false"
+            RoundedLinks = "true"
+            RouteLinks = "true"
+            ShowGrid = "true"
+            BackBrush = "'blue'"
+            AutoResize  = autoResize
+            Behavior = behavior
+            DefaulShape = "'Actor'"
+            (onLinkCreated) = "nodeCreated($event)"
+            (onLabelClicked) = "textEdited($event)"
+            (onNodeStackPanelEdited) = "onNodeDoubleClicked($event)"
+            (onLinkClicked) = "linkClicked($event)" >
+        </diagram-view>
+        <svg *ngIf = 'hide_me_canvas' id =inner_canvas> </svg>
+
+</div>
+    
+  
+<div class='side-container'>
+    <nav class="side-container-nav">
+        <!-- <h3> Control pannal</h3> -->
+   <!-- <li display=none> </li> <button mat-button (click)="startWorkSpace()"> Start Workspace </button> -->
+   <mat-accordion displayMode="flat" multi="true" #accordion="matAccordion">
+        <mat-expansion-panel  (click)="startWorkSpace()"
+        disabled=false
+        [expanded]=expand_first
+        hideToggle=false>
+
+                <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          Start Workspace
+                        </mat-panel-title>
+                        <mat-panel-description>
+                          Draw your pertri diagram
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+                    
+                      <mat-action-row>
+                            <button mat-button (click)="addState()">Add State</button><br>
+                      </mat-action-row>
+                      <mat-action-row>
+                            <button mat-button (click)="addTransition()">Add Transition</button><br>
+                      </mat-action-row>
+                      <mat-action-row>
+                            <button mat-button (click)="setPreview()">Preview</button>
+                      </mat-action-row>
+        </mat-expansion-panel>
+
+
+        <mat-expansion-panel  (click)="importJson()"
+        disabled="false"
+        [expanded]=expand_second
+        hideToggle="false">
+
+                <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          Import Diagram
+                        </mat-panel-title>
+                        <mat-panel-description>
+                          import your pertri diagram
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+                    
+                      <mat-action-row>
+                        <input type="file" 
+                        class="input"
+                         id="myfile" 
+                         accept=".json" 
+                        (change)="importPetri($event)" 
+                        name="myfile" />       
+                      </mat-action-row>
+                      
+        </mat-expansion-panel>
+    </mat-accordion>
+    
+    <!-- MAt CARD-->
+    <br>
+    <svg id=preview> </svg>
+</nav>
+
+    
+
+
+</div>
+
+

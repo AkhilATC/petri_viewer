@@ -6,6 +6,9 @@ import Behavior = MindFusion.Diagramming.Behavior;
 import Diagram = MindFusion.Diagramming.Diagram;
 import { MatAccordion } from '@angular/material';
 import { ApiserviceService } from './apiservice.service';
+import {MatDialog} from '@angular/material/dialog';
+
+
 
 import * as Common from "mindfusion-common";
 
@@ -31,19 +34,26 @@ export class AppComponent {
   public state_node = [];
   public msg:any= "Petri Viewer";
   public petri_json_data;
+  public firedNodes:any = [];
+  
+  
   
   diagram : Diagram;
+  petrinet : PetriNet;
   hide_me=false;
   hide_me_canvas=false;
   view_demo = false;
   expand_first = false;
   expand_second = false;
+  imported = false;
+  quatity_value = '5';
    
   
   public constructor(public ApiService:ApiserviceService){
     this.diagram = new Diagram();
     this.data = [];
-    this.diagram.setBackgroundImageUrl('assets/download1.png')
+    this.diagram.setBackgroundImageUrl('assets/download1.png');
+    
     
   }
 ngOnInit(){ 
@@ -60,6 +70,7 @@ startWorkSpace(){
   this.showMessage( 'Workspace initiated');
  
 }
+// depricated
 addState(){
   var CompositeNode = MindFusion.Diagramming.CompositeNode;
     var StateNode = CompositeNode.classFromTemplate("StateNode",{
@@ -117,7 +128,7 @@ addState(){
     
 
   }
-
+// depricated
 addTransition(){
     var CompositeNode = MindFusion.Diagramming.CompositeNode;
     var TransitionNode = CompositeNode.classFromTemplate("TransitionNode",{
@@ -171,7 +182,7 @@ addTransition(){
      this.msg = 'Transition node created.'
      
   }
-
+// depricated
 nodeCreated($event){
   console.log("node Created")
   //console.log($event.args.link)
@@ -191,13 +202,13 @@ nodeCreated($event){
     }
   }
   
-}
+}// depricated
 textEdited($event){
   console.log('text-edited');
   
 
   
-}
+}// depricated
 onNodeDoubleClicked($event){
   console.log("on Node Double Clicked");
   console.log($event);
@@ -210,11 +221,81 @@ importJson(){
   this.expand_second =true;
   this.showMessage('Working with json file: Display & proccess PetriNets');
 }
-showPetriDiagram(data){
-  console.log(data)
+
+showPetriDiagram(data_){
+  // show petri diagram
   this.view_demo = true;
-  const model = data;
-  const petrinet = new PetriNet(document.getElementById('inner_canvas'), model)
+  const model = data_;
+  this.petrinet = new PetriNet(document.getElementById('inner_canvas'), model,{
+    fireSemantics: {
+    // isFireable: (t, making) => {
+    // console.log("is firable")
+    // // console.log(t)
+    // // console.log(making)
+    // return true;
+    // },
+    fire: (t, marking) => {
+  
+    const pre = t.preconditions
+    const post = t.postconditions
+    
+    const nextMarking = {}
+    console.log("markings  are");
+    console.log(marking);
+    this.firedNodes = [];
+    for (const p in marking) {
+    if (!marking.hasOwnProperty(p)) {
+    throw new Error(
+    `'${p}' is precondition of '${t.name}' but doesn't appear in marking '${marking}'.`)
+    }
+    if(t.hasOwnProperty('guardFunction')){
+      console.log("-----+++++++++ guardFunction ++++++++++++");
+      // debugger;
+      console.log(t.guardFunction);
+
+      var nodeList = [];
+      var elseNodes = [];
+      for (const [key, value] of Object.entries(t.guardFunction)) {
+        // console.log(`${key}: ${value}`);
+        let new_str = value.toString().replace('qty',this.quatity_value);
+        const nodeInfo = {'node':key,'logic':new_str}
+          if(eval(new_str)){
+            nodeList.push(key);
+            nodeInfo['action'] = true;
+            
+          }else{
+            elseNodes.push(key);
+            nodeInfo['action'] = false;
+          }
+          // debugger;
+          
+          if (!this.firedNodes.some(({node}) => node === key)) {
+           
+            this.firedNodes.push(nodeInfo)
+          }
+      }
+     if(nodeList.includes(p) && !elseNodes.includes(p)){
+      nextMarking[p] = (marking[p] || 0) - (pre[p] || 0) + (post[p] || 0)
+     }else if(!nodeList.includes(p) && elseNodes.includes(p)){
+      nextMarking[p] = (marking[p] || 0) 
+     }else{
+      nextMarking[p] = (marking[p] || 0) - (pre[p] || 0) + (post[p] || 0)
+     } 
+    }else{
+
+      nextMarking[p] = (marking[p] || 0) - (pre[p] || 0) + (post[p] || 0)
+    }
+   
+    if (nextMarking[p] < 0) {
+    throw new Error(`'${t.name}' is not fireable`)
+    }
+    // console.log(arrayList)
+    }
+    return nextMarking
+    }
+    }
+    });
+  // console.log(petrinet.marking())
 
 }
 importPetri($event){
@@ -227,8 +308,10 @@ importPetri($event){
     var reader =   new FileReader();
     reader.readAsText(file,"UTF-8");
     reader.onload = (eve:Event) =>{
-      json_data = JSON.parse(eve.target['result']); 
-      this.showPetriDiagram(json_data);
+      json_data = JSON.parse(eve.target['result']);
+      this.petri_json_data = json_data; 
+      // this.showPetriDiagram(this.petri_json_data);
+      this.imported = true;
       console.log(json_data);
       }
     reader.onerror = (eve:Event)=>{
@@ -240,15 +323,20 @@ importPetri($event){
     }
   }
 }
-setPreview(){
-  console.log("preview");
-  this.msg = '🏃‍ your request is processing.'
-  var payloads = JSON.stringify(this.state_node);
-        this.ApiService.getDiagram(payloads)
-          .subscribe((data)=>{
-            new PetriNet(document.getElementById('preview'), data['dd'])            
-          },error  => {
-            this.msg = 'Failed to load preview 😞 '
-            });
+setToken(selected){
+  console.log("----- set token ---")
+  
+  Object.keys(this.petri_json_data.m0).forEach(v => this.petri_json_data.m0[v] = 0)
+  this.petri_json_data.m0[selected] = 1
+  console.log('ddddd-')
+  console.log(selected);
+  console.log(this.petri_json_data)
+  // this.petrinet = new PetriNet(document.getElementById('inner_canvas'),this.petri_json_data)
+
 }
+viewPreview(){
+  this.showPetriDiagram(this.petri_json_data);
+
+}
+
 }

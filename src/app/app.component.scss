@@ -12,9 +12,16 @@
 
     svg#inner_canvas{
         max-height: calc(100vh - 70px);
-    max-width: calc(100vw - 300px);
+        max-width: calc(100vw - 300px);
         width: 100%;
-         height: 100%;
+        height: 100%;
+        ::ng-deep g.nodes{
+            g.transition.fireable rect{
+                stroke: rgb(255,0,0) !important;
+                }
+        }
+    
+        
     
     }
     
@@ -30,8 +37,7 @@
     float: right;
     svg#preview{
     max-height: 300px;
-    width: 262px;
-    }
+    width: 262px;}
     
     
 }

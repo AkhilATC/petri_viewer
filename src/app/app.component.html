@@ -25,13 +25,16 @@
             (onNodeStackPanelEdited) = "onNodeDoubleClicked($event)"
             (onLinkClicked) = "linkClicked($event)" >
         </diagram-view>
+        <!-- inner canvas - petriNet -->
         <svg *ngIf = 'hide_me_canvas' id =inner_canvas> </svg>
 
 </div>
     
   
 <div class='side-container'>
-    <nav class="side-container-nav">
+
+
+  <nav class="side-container-nav">
         <!-- <h3> Control pannal</h3> -->
    <!-- <li display=none> </li> <button mat-button (click)="startWorkSpace()"> Start Workspace </button> -->
    <mat-accordion displayMode="flat" multi="true" #accordion="matAccordion">
@@ -54,9 +57,6 @@
                       </mat-action-row>
                       <mat-action-row>
                             <button mat-button (click)="addTransition()">Add Transition</button><br>
-                      </mat-action-row>
-                      <mat-action-row>
-                            <button mat-button (click)="setPreview()">Preview</button>
                       </mat-action-row>
         </mat-expansion-panel>
 
@@ -83,14 +83,51 @@
                         (change)="importPetri($event)" 
                         name="myfile" />       
                       </mat-action-row>
+                      <mat-action-row>
+                        <mat-form-field appearance="fill"  *ngIf="imported">
+                          <mat-label>Set token</mat-label>
+                          <mat-select [(value)]="selected" (selectionChange)="setToken(selected)">
+                            <mat-option *ngFor="let m0 of petri_json_data.places" [value]="m0">{{ m0 }}</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                        <button mat-raised-button (click)="viewPreview()">Preview</button>
+                      </mat-action-row>
+                      
                       
         </mat-expansion-panel>
     </mat-accordion>
     
     <!-- MAt CARD-->
     <br>
-    <svg id=preview> </svg>
-</nav>
+    <div *ngIf="imported">
+      <mat-card *ngFor="let m0 of firedNodes">
+
+        <mat-card-header>
+          
+          <mat-card-title>{{m0.node}}</mat-card-title>
+          
+        </mat-card-header>
+        <mat-card-content>
+          
+            <p *ngIf="m0.action">
+              <span matBadge="1" matBadgeSize="large" matBadgeColor="warn" matBadgeOverlap="false">{{m0.logic}}</span>
+            </p>
+            <br>
+            <p *ngIf="!m0.action">
+              <span matBadge="0" matBadgeSize="large" matBadgeColor="accent" matBadgeOverlap="false">{{m0.logic}}</span>
+            </p>
+          
+        </mat-card-content>
+
+
+      </mat-card>
+
+
+    </div>
+    
+    
+    
+  </nav>
 
     
 

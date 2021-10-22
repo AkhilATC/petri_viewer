@@ -1,0 +1,255 @@
+{
+  "places": [
+    "m11",
+    "m10",
+    "m13",
+    "m12",
+    "m15",
+    "m14",
+    "m17",
+    "m16",
+    "m19",
+    "m18",
+    "m1",
+    "m2",
+    "m3",
+    "m4",
+    "m5",
+    "m6",
+    "m7",
+    "m20",
+    "m8",
+    "m9"
+  ],
+  "m0": {
+    "m1": 1,
+    "m2": 0,
+    "m3": 0,
+    "m4": 0,
+    "m5": 0,
+    "m6": 0,
+    "m7": 0,
+    "m20": 0,
+    "m8": 0,
+    "m11": 0,
+    "m9": 0,
+    "m10": 0,
+    "m13": 0,
+    "m12": 0,
+    "m15": 0,
+    "m14": 0,
+    "m17": 0,
+    "m16": 0,
+    "m19": 0,
+    "m18": 0
+  },
+  "transitions": [
+    {
+      "postconditions": {
+        "m12": 1
+      },
+      "cost": 1,
+      "preconditions": {
+        "m11": 1
+      },
+      "name": "a11",
+      "time": 0.5
+    },
+    {
+      "postconditions": {
+        "m11": 1
+      },
+      "cost": 1,
+      "preconditions": {
+        "m10": 1
+      },
+      "name": "a10",
+      "time": 0.5
+    },
+    {
+      "postconditions": {
+        "m17": 1,
+        "m16": 1
+      },
+      "cost": 1,
+      "preconditions": {
+        "m13": 1
+      },
+      "name": "a13",
+      "time": 0.5
+    },
+    {
+      "postconditions": {
+        "m15": 1,
+        "m14": 1,
+        "m13": 1
+      },
+      "cost": 1,
+      "preconditions": {
+        "m12": 1
+      },
+      "name": "a12",
+      "time": 0.5
+    },
+    {
+      "postconditions": {
+        "m17": 1,
+        "m16": 1
+      },
+      "cost": 1,
+      "preconditions": {
+        "m15": 1
+      },
+      "name": "a15",
+      "time": 0.5
+    },
+    {
+      "postconditions": {
+        "m17": 1,
+        "m16": 1
+      },
+      "cost": 1,
+      "preconditions": {
+        "m14": 1
+      },
+      "name": "a14",
+      "time": 0.5
+    },
+    {
+      "postconditions": {
+        "m18": 1
+      },
+      "cost": 1,
+      "preconditions": {
+        "m17": 1
+      },
+      "name": "a17",
+      "time": 0.5
+    },
+    {
+      "postconditions": {
+        "m18": 1
+      },
+      "cost": 1,
+      "preconditions": {
+        "m16": 1
+      },
+      "name": "a16",
+      "time": 0.5
+    },
+    {
+      "postconditions": {
+        "m19": 1,
+        "m20": 1
+      },
+      "cost": 1,
+      "preconditions": {
+        "m18": 1
+      },
+      "name": "a18",
+      "time": 0.5
+    },
+    {
+      "postconditions": {
+        "m4": 1
+      },
+      "cost": 5,
+      "preconditions": {
+        "m1": 1
+      },
+      "name": "a1",
+      "time": 7
+    },
+    {
+      "postconditions": {
+        "m4": 1
+      },
+      "cost": 1,
+      "preconditions": {
+        "m2": 1
+      },
+      "name": "a2",
+      "time": 1
+    },
+    {
+      "postconditions": {
+        "m4": 1
+      },
+      "cost": 1,
+      "preconditions": {
+        "m3": 1
+      },
+      "name": "a3",
+      "time": 0.5
+    },
+    {
+      "postconditions": {
+        "m5": 1,
+        "m6": 1
+      },
+      "cost": 1,
+      "preconditions": {
+        "m4": 1
+      },
+      "name": "a4",
+      "time": 0.5
+    },
+    {
+      "postconditions": {
+        "m7": 1
+      },
+      "cost": 1,
+      "preconditions": {
+        "m5": 1
+      },
+      "name": "a5",
+      "time": 0.5
+    },
+    {
+      "postconditions": {
+        "m7": 1
+      },
+      "cost": 1,
+      "preconditions": {
+        "m6": 1
+      },
+      "name": "a6",
+      "time": 0.5
+    },
+    {
+      "postconditions": {
+        "m8": 1,
+        "m9": 1,
+        "m10": 1
+      },
+      "cost": 1,
+      "preconditions": {
+        "m7": 1
+      },
+      "name": "a7",
+      "time": 0.5
+    },
+    {
+      "postconditions": {
+        "m11": 1
+      },
+      "cost": 1,
+      "preconditions": {
+        "m8": 1
+      },
+      "name": "a8",
+      "time": 0.5
+    },
+    {
+      "postconditions": {
+        "m11": 1
+      },
+      "cost": 1,
+      "preconditions": {
+        "m9": 1
+      },
+      "name": "a9",
+      "time": 0.5
+    }
+  ]
+}
